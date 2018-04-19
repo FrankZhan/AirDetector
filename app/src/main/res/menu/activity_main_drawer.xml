@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_device"
+            android:icon="@drawable/ic_menu_device"
+            android:title="设备管理" />
+        <item
+            android:id="@+id/nav_info"
+            android:icon="@drawable/ic_menu_info"
+            android:title="我的信息" />
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/ic_menu_help"
+            android:title="用户帮助" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_menu_us"
+            android:title="关于我们" />
+
+        <item
+            android:id="@+id/nav_dropout"
+            android:icon="@drawable/ic_menu_drop"
+            android:title="退出"
+            />
+
+    </group>
+
+</menu>
