@@ -80,10 +80,14 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_about) {
             startActivity(new Intent(MainActivity.this, DeviceManageActivity.class));
         } else if (id == R.id.nav_dropout) {
-            startActivity(new Intent(MainActivity.this, DeviceManageActivity.class));
+            dropout();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    private void dropout(){
+        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        finish();
     }
 }
