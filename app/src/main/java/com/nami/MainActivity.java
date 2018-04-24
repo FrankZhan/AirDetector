@@ -3,6 +3,7 @@ package com.nami;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -47,12 +48,18 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // 设置listView
-        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.main_recycle);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(new RecyclerViewAdapter(MainActivity.this));
-
+        CardView device = (CardView)findViewById(R.id.device);
+        device.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, HistoryActivity.class));
+            }
+        });
+//        // 设置listView
+//        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.main_recycle);
+//        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
+//        recyclerView.setItemAnimator(new DefaultItemAnimator());
+//        recyclerView.setAdapter(new RecyclerViewAdapter(MainActivity.this));
     }
 
     @Override
@@ -76,9 +83,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_info) {
             startActivity(new Intent(MainActivity.this, AlterInfoActivity.class));
         } else if (id == R.id.nav_help) {
-            startActivity(new Intent(MainActivity.this, DeviceManageActivity.class));
+            startActivity(new Intent(MainActivity.this, UserHelpActivity.class));
         } else if (id == R.id.nav_about) {
-            startActivity(new Intent(MainActivity.this, DeviceManageActivity.class));
+            startActivity(new Intent(MainActivity.this, AboutActivity.class));
         } else if (id == R.id.nav_dropout) {
             dropout();
         }
