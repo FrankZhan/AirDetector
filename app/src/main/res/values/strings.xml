@@ -13,4 +13,5 @@
     <string name="net3">3. 使用手机连接到目标路由器</string>
     <string name="net4">4. 点击APP主页右下角的 ＋ ; 出现‘添加设备的界面；点击 开始添加 按钮；输入手机已经连接的wifi密码</string>
     <string name="net5">5. 设备连接成功后，会出现提示信息</string>
+    <string name="findNoDev">暂未发现设备</string>
 </resources>

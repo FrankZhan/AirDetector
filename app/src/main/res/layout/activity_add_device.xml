@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/lightGrey"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
@@ -23,7 +26,114 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/layout_start"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/txt_find"
+                android:layout_centerHorizontal="true">
+
+                <ProgressBar
+                    android:id="@+id/progress_add"
+                    style="@style/Widget.AppCompat.ProgressBar"
+                    android:visibility="visible"
+                    android:layout_width="108dp"
+                    android:layout_height="108dp" />
+
+                <ImageView
+                    android:id="@+id/mark"
+                    android:visibility="invisible"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/mark"/>
+
+            </FrameLayout>
+
+
+            <TextView
+                android:id="@+id/txt_find"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="发现的设备"
+                android:padding="20dp"
+                android:layout_centerInParent="true"/>
+
+            <TextView
+                android:id="@+id/txt_device"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/riceWhite"
+                android:padding="20dp"
+                android:layout_below="@id/txt_find"
+                android:hint="@string/findNoDev"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_info"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/txt_wifi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="网络： 注：请勿选择5G网络"/>
+
+            <TextView
+                android:id="@+id/edt_wifi"
+                android:layout_below="@+id/txt_wifi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:text="wifi"
+                android:textSize="15sp"
+                android:background="@color/riceWhite"/>
+
+            <TextView
+                android:layout_below="@+id/edt_wifi"
+                android:id="@+id/txt_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="密码"/>
+
+            <EditText
+                android:id="@+id/edt_pwd"
+                android:layout_below="@+id/txt_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/riceWhite"
+                android:hint="password"
+                android:textSize="15sp"
+                android:inputType="textPassword"
+                android:padding="20dp" />
+
+            <Button
+                android:id="@+id/bnt_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/touch_blue_deep"
+                android:layout_marginBottom="20dp"
+                android:text="开始添加" />
+        </RelativeLayout>
+
+    </FrameLayout>
 
 
 
-</android.widget.RelativeLayout>
+
+
+
+</LinearLayout>
