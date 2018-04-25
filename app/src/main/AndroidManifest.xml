@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,21 +19,21 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".LoginActivity"/>
-        <activity android:name=".RegistActivity"
-            android:parentActivityName=".LoginActivity"/>
-        <activity android:name=".AddDeviceActivity"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".AlterInfoActivity"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".DeviceManageActivity"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".HistoryActivity"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".UserHelpActivity"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".AboutActivity"
-            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".activity.LoginActivity"/>
+        <activity android:name=".activity.RegistActivity"
+            android:parentActivityName=".activity.LoginActivity"/>
+        <activity android:name=".activity.AddDeviceActivity"
+            android:parentActivityName=".activity.MainActivity"/>
+        <activity android:name=".activity.AlterInfoActivity"
+            android:parentActivityName=".activity.MainActivity"/>
+        <activity android:name=".activity.DeviceManageActivity"
+            android:parentActivityName=".activity.MainActivity"/>
+        <activity android:name=".activity.HistoryActivity"
+            android:parentActivityName=".activity.MainActivity"/>
+        <activity android:name=".activity.UserHelpActivity"
+            android:parentActivityName=".activity.MainActivity"/>
+        <activity android:name=".activity.AboutActivity"
+            android:parentActivityName=".activity.MainActivity"/>
     </application>
 
 </manifest>

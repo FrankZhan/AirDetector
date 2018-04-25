@@ -1,4 +1,4 @@
-package com.nami;
+package com.nami.activity;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -6,16 +6,21 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-public class AlterInfoActivity extends AppCompatActivity {
+import com.nami.R;
+
+import java.util.Objects;
+
+public class UserHelpActivity extends AppCompatActivity {
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_alter_info);
+        setContentView(R.layout.activity_help);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
     }
 }

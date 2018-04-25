@@ -1,4 +1,4 @@
-package com.nami;
+package com.nami.activity;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -9,8 +9,9 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
+
+import com.nami.R;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
