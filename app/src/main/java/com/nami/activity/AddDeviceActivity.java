@@ -1,15 +1,19 @@
 package com.nami.activity;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -54,19 +58,11 @@ public class AddDeviceActivity extends AppCompatActivity{
     private RelativeLayout layoutStart, layoutInfo;
     private Button bntStart;
     private ProgressBar proAddDev;
-    private String wifiName, wifiPwd, TAG="AddDeviceActivity";
+    private String TAG="AddDeviceActivity";
     private ImageView mark;
 
     private EspWifiAdminSimple mWifiAdmin;
     private EsptouchAsyncTask3 mTask;
-    //显示Toast
-    private IEsptouchListener myListener = new IEsptouchListener() {
-
-        @Override
-        public void onEsptouchResultAdded(final IEsptouchResult result) {
-            onEsptoucResultAddedPerform(result);
-        }
-    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,6 +75,7 @@ public class AddDeviceActivity extends AppCompatActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
 
+        mWifiAdmin = new EspWifiAdminSimple(this);
         mark = (ImageView)findViewById(R.id.mark);
         proAddDev = (ProgressBar)findViewById(R.id.progress_add);
         layoutStart = (RelativeLayout)findViewById(R.id.layout_start);
@@ -93,6 +90,33 @@ public class AddDeviceActivity extends AppCompatActivity{
                 startConfig();
             }
         });
+
+        // 向系统说明接受某个广播信号
+        IntentFilter filter = new IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+        registerReceiver(mReceiver, filter);
+
+    }
+
+    private void startConfig(){
+        String apSsid = txtWiFi.getText().toString().trim();
+        String apPassword = edtPwd.getText().toString().trim();
+        String apBssid = mWifiAdmin.getWifiConnectedBssid();
+        String jsonData = "{'smartConfig':101}";
+
+        //设置展示控件
+        layoutInfo.setVisibility(View.INVISIBLE);
+        layoutStart.setVisibility(View.VISIBLE);
+
+        if (__IEsptouchTask.DEBUG) {
+            Log.d(TAG, "mBtnConfirm is clicked, mEdtApSsid = " + apSsid
+                    + ", " + " mEdtApPassword = " + apPassword);
+        }
+        if(mTask != null) {
+            mTask.cancelEsptouch();
+        }
+        // 执行espTouch
+        mTask = new EsptouchAsyncTask3();
+        mTask.execute(apSsid, apBssid, apPassword, jsonData);
 
     }
 
@@ -123,13 +147,6 @@ public class AddDeviceActivity extends AppCompatActivity{
         }
     };
 
-    private void startConfig(){
-        wifiName = txtWiFi.getText().toString().trim();
-        wifiPwd = edtPwd.getText().toString().trim();
-        Log.d(TAG, "wifiName: "+ wifiName+" wifiPwd: " + wifiPwd);
-        layoutInfo.setVisibility(View.INVISIBLE);
-        layoutStart.setVisibility(View.VISIBLE);
-    }
 
     @Override
     protected void onResume() {
@@ -137,9 +154,9 @@ public class AddDeviceActivity extends AppCompatActivity{
         // display the connected ap's ssid
         String apSsid = mWifiAdmin.getWifiConnectedSsid();
         if (apSsid != null) {
-            txtDev.setText(apSsid);
+            txtWiFi.setText(apSsid);
         } else {
-            txtDev.setText(R.string.no_device);
+            txtWiFi.setText(R.string.no_device);
         }
         // check whether the wifi is connected
         boolean isApSsidEmpty = TextUtils.isEmpty(apSsid);
@@ -149,22 +166,7 @@ public class AddDeviceActivity extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         unregisterReceiver(mReceiver);
-    }
-
-    // EspTouch 返回结果
-    private void onEsptoucResultAddedPerform(final IEsptouchResult result) {
-        runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-                String text = result.getBssid() + " is connected to the wifi";
-                Toast.makeText(AddDeviceActivity.this, text,
-                        Toast.LENGTH_LONG).show();
-            }
-
-        });
     }
 
     // EspTouch 异步进程
@@ -189,13 +191,6 @@ public class AddDeviceActivity extends AppCompatActivity{
         private Thread mTask;         //监听接受udp的ACK
         private boolean isACK;       //是否成功交互数据
         private boolean mIsInterrupt;
-        private TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                Log.i(TAG, "delay for 500ms");
-//                this.cancel();
-            }
-        };
 
         // 取消ESPTouch
         public void cancelEsptouch() {
@@ -207,39 +202,6 @@ public class AddDeviceActivity extends AppCompatActivity{
                 mEsptouchTask.interrupt();
             }
             interrupt();
-        }
-
-        //执行在UI进程中，更新进度条
-        @Override
-        protected void onPreExecute() {
-            mProgressDialog = new ProgressDialog(AddDeviceActivity.this);
-            mProgressDialog
-                    .setMessage("Esptouch is configuring, please wait for a moment...");
-            mProgressDialog.setCanceledOnTouchOutside(false);
-            // 取消ESPTouch
-            mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    synchronized (mLock) {
-                        if (__IEsptouchTask.DEBUG) {
-                            Log.i(TAG, "progress dialog is canceled");
-                        }
-                        if (mEsptouchTask != null) {
-                            mEsptouchTask.interrupt();
-                        }
-                    }
-                }
-            });
-            // 可以设置取消
-            mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE,
-                    "Waiting...", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
-            mProgressDialog.show();
-            mProgressDialog.getButton(DialogInterface.BUTTON_POSITIVE)
-                    .setEnabled(false);
         }
 
         //执行在工作进程
@@ -264,7 +226,6 @@ public class AddDeviceActivity extends AppCompatActivity{
                 } else {
                     mEsptouchTask = new EsptouchTask(apSsid, apBssid, apPassword, null, AddDeviceActivity.this);
                 }
-                mEsptouchTask.setEsptouchListener(myListener);
 
                 mSocketClient = new UDPSocketClient();
                 mSocketServer = new UDPSocketServer(mPortListening, maxListenTime, AddDeviceActivity.this);
@@ -283,47 +244,33 @@ public class AddDeviceActivity extends AppCompatActivity{
 
         @Override
         protected void onPostExecute(List<IEsptouchResult> result) {
-            mProgressDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
-            mProgressDialog.getButton(DialogInterface.BUTTON_POSITIVE).setText("OK");
+
+            Log.d(TAG, "onPostExecute");
+            proAddDev.setVisibility(View.INVISIBLE);
+            mark.setVisibility(View.VISIBLE);
             if (result == null) {
-                mProgressDialog.setMessage("Create Esptouch task failed, the esptouch port could be used by other thread");
+                Log.d(TAG, "Create Esptouch task failed, the esptouch port could be used by other thread");
+                txtDev.setText(R.string.no_device);
+                mark.setImageResource(R.drawable.problem);
+                Toast.makeText(AddDeviceActivity.this, "添加设备失败，请稍后再试", Toast.LENGTH_SHORT).show();
                 return;
             }
-
+            //成功配对
             IEsptouchResult firstResult = result.get(0);
             // check whether the task is cancelled and no results received
             if (!firstResult.isCancelled()) {
-                int count = 0;
-                // max results to be displayed, if it is more than maxDisplayCount,
-                // just show the count of redundant ones
-                final int maxDisplayCount = 1;
-                // the task received some results including cancelled while
-                // executing before receiving enough results
                 if (firstResult.isSuc()) {
-                    StringBuilder sb = new StringBuilder();
-
-                    for (IEsptouchResult resultInList : result) {
-                        sb.append("Esptouch success, bssid = "
-                                + resultInList.getBssid()
-                                + ",InetAddress = "
-                                + resultInList.getInetAddress()
-                                .getHostAddress() + "\n");
-                        count++;
-                        if (count >= maxDisplayCount) {
-                            break;
-                        }
-                    }
-                    if (count < result.size()) {
-                        sb.append("\nthere's " + (result.size() - count)
-                                + " more result(s) without showing\n");
-                    }
-                    mProgressDialog.setMessage(sb.toString());
+                    Log.d(TAG, "Esptouch success, bssid = " + firstResult.getBssid()
+                            + ",InetAddress = " + firstResult.getInetAddress().getHostAddress() + "\n");
+                    txtDev.setText(firstResult.getInetAddress().getHostAddress());
                 } else {
-                    mProgressDialog.setMessage("Esptouch fail");
+                    Log.d(TAG, "Create Esptouch task failed, the esptouch port could be used by other thread");
+                    txtDev.setText(R.string.no_device);
+                    mark.setImageResource(R.drawable.problem);
+                    Toast.makeText(AddDeviceActivity.this, "添加设备失败，请稍后再试", Toast.LENGTH_SHORT).show();
                 }
             }
         }
-
         //监听用户发回来的ACK
         private void listenACK(){
             mTask = new Thread() {
@@ -390,7 +337,6 @@ public class AddDeviceActivity extends AppCompatActivity{
             listenACK();
             for(int i=0;i<3;i++){
                 Log.e(TAG,"Send User Data: " + jsonData);
-                //timer.schedule(timerTask, 5);                                   bug在这里。。。
                 mSocketClient.sendData(jsonData,
                         hostName,
                         mTargetPort,
