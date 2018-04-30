@@ -13,7 +13,7 @@ import java.net.UnknownHostException;
 
 /**
  * this class is used to help send UDP data according to length
- *
+ * smartConfig 时辅助
  * @author afunx
  */
 public class UDPSocketClient {

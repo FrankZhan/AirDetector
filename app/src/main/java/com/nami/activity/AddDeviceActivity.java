@@ -43,6 +43,8 @@ import com.nami.util.EspWifiAdminSimple;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -101,7 +103,10 @@ public class AddDeviceActivity extends AppCompatActivity{
         String apSsid = txtWiFi.getText().toString().trim();
         String apPassword = edtPwd.getText().toString().trim();
         String apBssid = mWifiAdmin.getWifiConnectedBssid();
-        String jsonData = "{'smartConfig':101}";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmm");
+        Date date = new Date(System.currentTimeMillis());
+        String jsonData = "{'user':'18840813682', 'time':'"+simpleDateFormat.format(date)+"'}";
+        Log.d(TAG, "jsonData:"+jsonData);
 
         //设置展示控件
         layoutInfo.setVisibility(View.INVISIBLE);

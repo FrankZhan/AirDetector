@@ -11,6 +11,9 @@ import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.util.Arrays;
 
+/**
+ *  smartConfig 时辅助
+ */
 public class UDPSocketServer {
     private static final String TAG = "APP_UDPSocketServer";
     private final byte[] buffer;
