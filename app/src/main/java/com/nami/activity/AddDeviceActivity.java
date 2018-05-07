@@ -161,7 +161,7 @@ public class AddDeviceActivity extends AppCompatActivity{
         if (apSsid != null) {
             txtWiFi.setText(apSsid);
         } else {
-            txtWiFi.setText(R.string.no_device);
+            txtWiFi.setText(R.string.no_wifi);
         }
         // check whether the wifi is connected
         boolean isApSsidEmpty = TextUtils.isEmpty(apSsid);

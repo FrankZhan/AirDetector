@@ -6,7 +6,10 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="dev_name">home</string>
+    <string name="dev_mac">FF:FF:FF:FF:FF</string>
     <string name="no_device">您还未添加设备</string>
+    <string name="no_wifi">您还未连接WiFi</string>
     <string name="connect_net">Answer: 下载APP、长按WiFI键、绑定设备</string>
     <string name="net1">1. 扫描说明书、包装上的二维码即可下载APP</string>
     <string name="net2">2. 确保路由器处于2.4G工作频段，Nami空探不支持5G</string>
