@@ -41,6 +41,8 @@
             android:parentActivityName=".activity.MainActivity"/>
         <activity android:name=".activity.AboutActivity"
             android:parentActivityName=".activity.MainActivity"/>
+        <activity android:name=".activity.AlterDevInfoActivity"
+            android:parentActivityName=".activity.DeviceManageActivity"/>
     </application>
 
 </manifest>

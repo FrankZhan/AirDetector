@@ -69,12 +69,43 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="phone"
-            android:inputType="textEmailAddress"
+            android:hint="密码"
+            android:inputType="textPassword"
             android:maxLength="25"
             android:maxLines="1" />
 
     </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_margin="1dp"
+        android:background="@color/riceWhite"
+        android:layout_width="match_parent"
+        android:padding="5dp"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="确认密码"
+            android:inputType="textPassword"
+            android:maxLength="25"
+            android:maxLines="1" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/bnt_go"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/touch_blue_deep"
+            android:layout_marginBottom="20dp"
+            android:text="确认修改" />
+    </RelativeLayout>
 
 
 </LinearLayout>
