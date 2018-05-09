@@ -94,20 +94,30 @@
                             android:text="空气 良 90"
                             android:textColor="@color/riceWhite" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="空气 良 90"
-                            android:textColor="@color/riceWhite" />
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/riceWhite"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="空气 良 90"
+                            android:text="西南风 1级"
+                            android:textColor="@color/riceWhite" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/riceWhite"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="湿度 20%"
                             android:textColor="@color/riceWhite" />
 
 
@@ -229,7 +239,7 @@
             <android.support.v7.widget.CardView
                 android:id="@+id/device"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_margin="2dp"
                 android:padding="2dp"
                 android:background="@drawable/touch_grey_white"

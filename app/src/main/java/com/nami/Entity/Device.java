@@ -1,8 +1,8 @@
 package com.nami.Entity;
 
 public class Device {
-    private String MAC;
-    private String name;
+    private String MAC;   // Uid
+    private String name;  //DeviceTag
     public Device(){
         MAC = null;
         name = null;

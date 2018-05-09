@@ -24,8 +24,7 @@
             android:id="@+id/ed_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint=" e-mail"
-            android:inputType="textEmailAddress"
+            android:hint=" username"
             android:maxLength="25"
             android:maxLines="1"/>
 

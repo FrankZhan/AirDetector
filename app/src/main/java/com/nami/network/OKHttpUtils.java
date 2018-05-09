@@ -52,25 +52,35 @@ public class OKHttpUtils {
         });
     }
 
-    private void postDataWithParame() {
+    private void postDataWithParame(String urlStr, String jsonStr) {
 
-        MediaType JSON = MediaType.parse("application/json; charset=utf-8");//数据类型为json格式，
-        String jsonStr = "{\"username\":\"lisi\",\"nickname\":\"李四\"}";//json数据.
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");  //数据类型为json格式
         RequestBody body = RequestBody.create(JSON, jsonStr);
         Request request = new Request.Builder()
-                .url("http://www.baidu.com")
+                .url(urlStr)
+                .addHeader("Air-Token", "token")
                 .post(body)
                 .build();
+        //String result;
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
             }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if(response.isSuccessful()){//回调的方法执行在子线程。
-                    Log.d("kwwl","获取数据成功了");
-                    Log.d("kwwl","response.code()=="+response.code());
-                    Log.d("kwwl","response.body().string()=="+response.body().string());
+
+                    if(response.code() == 0){
+                        Log.d(TAG,"获取数据成功了");
+                        assert response.body() != null;
+                        String result = response.body().string();
+                        Log.d(TAG, "response.body().string(): " + result);
+                    }else{
+                        Log.e(TAG,"response.code(): "+response.code());
+
+                    }
+
                 }
             }
         });

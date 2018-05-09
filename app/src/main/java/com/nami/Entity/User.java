@@ -2,14 +2,23 @@ package com.nami.Entity;
 
 public class User {
 
-    private String userID;
-    private String name;
+    private String userID;  // ID
+    private String email;   // Email
+    private String name;    // Username
     private String password;
 
     public User(){
         userID = null;
         name = null;
         password = null;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public void setName(String name) {

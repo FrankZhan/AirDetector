@@ -1,4 +1,5 @@
 <resources>
+    <string name="severIP">http://192.168.1.2</string>
     <string name="app_name">Nami空探</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

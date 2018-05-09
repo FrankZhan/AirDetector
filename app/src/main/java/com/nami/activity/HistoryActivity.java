@@ -60,8 +60,9 @@ public class HistoryActivity extends AppCompatActivity {
         });
 
     }
+
     private void initChart(LineChartView chartView){
-        Line line = new Line(mPointValues).setColor(R.color.colorPrimary).setCubic(true).setHasLabels(true)
+        Line line = new Line(mPointValues).setColor(R.color.lightGreen).setCubic(true).setHasLabels(true)
                 .setStrokeWidth(2).setShape(ValueShape.CIRCLE).setPointRadius(3);
         List<Line> lines = new ArrayList<Line>();
         line.setFilled(true);
@@ -86,7 +87,7 @@ public class HistoryActivity extends AppCompatActivity {
         final Viewport v = new Viewport(chartView.getMaximumViewport());
         v.top = 50;
         v.bottom = 0;
-        chartView.setMaximumViewport(v);
+        chartView.setMaximumViewport(v);  // 注意max在current上面
         chartView.setCurrentViewport(v);
         chartView.setViewportCalculationEnabled(false);
 
