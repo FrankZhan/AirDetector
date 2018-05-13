@@ -10,3 +10,9 @@
 空气检测仪架构：
 1. stm32控制屏幕和传感器，nodeMCU接受stm32的数据并通过wifi传给后台。
 2. nodeMCU与APP通过smartConfig技术 获得wifi的ssid和密码
+
+APP:
+折线图：使用了helloCharts
+<br>详见 /activity/historyActivity
+网络： 使用了OKHttp
+<br>详见 /activity/loginActivity， /Network/OKHttpUtil

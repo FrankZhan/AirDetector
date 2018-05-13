@@ -92,10 +92,34 @@ public class OKHttpUtil {
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody requestBody = RequestBody.create(JSON, params);
 
-        Log.d(TAG, "Post: " + requestBody.toString());
+        Log.d(TAG, "Post: " + params);
         //创建Request
         Request request = new Request.Builder()
                 .url(url)
+                .post(requestBody)
+                .build();
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(callback);
+
+    }
+
+    // 添加令牌头
+    public static void doPost(String token, String url, String params, Callback callback) {
+
+        //创建OkHttpClient请求对象
+        OkHttpClient okHttpClient = getInstance();
+        //3.x版本post请求换成FormBody 封装键值对参数
+
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody requestBody = RequestBody.create(JSON, params);
+
+        Log.d(TAG, "token: " + token);
+        Log.d(TAG, "Post: " + params);
+        //创建Request
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Air-Token", token)
                 .post(requestBody)
                 .build();
 

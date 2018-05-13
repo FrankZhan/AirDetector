@@ -1,6 +1,7 @@
 package com.nami.activity;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -33,7 +34,7 @@ public class RegistActivity extends AppCompatActivity {
 
 
     private String TAG = "RegisterActivity";
-    private String url = "http://192.168.1.2/api/accounts/register";
+    private String url;
     private TextInputLayout tl_username;
     private TextInputLayout tl_mail;
     private TextInputLayout tl_password1;
@@ -43,12 +44,15 @@ public class RegistActivity extends AppCompatActivity {
     private Matcher matcher;
     private final int MSG_SUCCESS = 0;
     private final int MSG_FAIL = 1;
+    private final int MSG_HAVE = 2;  // 已经注册过了
+    private ProgressDialog dialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_regist);
 
+        url = getResources().getString(R.string.url_regist);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);
@@ -59,6 +63,9 @@ public class RegistActivity extends AppCompatActivity {
         tl_mail = (TextInputLayout)findViewById(R.id.e_mail);
         tl_password1 = (TextInputLayout)findViewById(R.id.password1);
         tl_password2 = (TextInputLayout)findViewById(R.id.password2);
+
+        dialog = new ProgressDialog(RegistActivity.this);
+        dialog.setMessage("正在注册中，请稍候... ...");
 
         //设置悬浮按钮
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -114,6 +121,9 @@ public class RegistActivity extends AppCompatActivity {
     // 连接服务器 注册
     private void registSever(String Username, String Email, String Password){
 
+        // 显示进度条
+        dialog.show();
+
         JSONObject jsonObject = new JSONObject();
         try{
             jsonObject.put("Username", Username);
@@ -135,13 +145,18 @@ public class RegistActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch(msg.what){
                 case MSG_SUCCESS:
+                    dialog.cancel();
                     Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(RegistActivity.this, LoginActivity.class));
                     finish();
                     break;
                 case MSG_FAIL:
-                    Toast.makeText(getApplicationContext(), "登录失败", Toast.LENGTH_SHORT).show();
+                    dialog.cancel();
+                    Toast.makeText(getApplicationContext(), "注册失败", Toast.LENGTH_SHORT).show();
                     break;
+                case MSG_HAVE:
+                    dialog.cancel();
+                    Toast.makeText(getApplicationContext(), "该账户已经注册过了", Toast.LENGTH_SHORT).show();
                 default:
                     super.handleMessage(msg);
                     break;
@@ -164,9 +179,24 @@ public class RegistActivity extends AppCompatActivity {
             Message msg = Message.obtain();
             msg.what = MSG_FAIL;
             if (response.isSuccessful()) {
-                Log.d(TAG, response.code() + "");
-                if (response.code() == 0) {
-                    msg.what = MSG_SUCCESS;
+
+                Log.d(TAG, "response code: " + response.code());
+
+                if (response.body() != null) {
+                    String result = response.body().string();
+                    Log.d(TAG, "response.body().string(): " + result);
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(result);
+                        int code = jsonObject.getInt("code");
+                        if(code == 0){
+                            msg.what = MSG_SUCCESS;
+                        }else if(code == 40001){
+                            msg.what = MSG_HAVE;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             myHandler.sendMessage(msg);

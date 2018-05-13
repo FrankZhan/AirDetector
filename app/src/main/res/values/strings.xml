@@ -1,5 +1,4 @@
 <resources>
-    <string name="severIP">http://192.168.1.2</string>
     <string name="app_name">Nami空探</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -18,4 +17,10 @@
     <string name="net4">4. 点击APP主页右下角的 ＋ ; 出现‘添加设备的界面；点击 开始添加 按钮；输入手机已经连接的wifi密码</string>
     <string name="net5">5. 设备连接成功后，会出现提示信息</string>
     <string name="findNoDev">暂未发现设备</string>
+
+    <string name="url_login">http://210.30.100.172:8671/api/accounts/login</string>
+    <string name="url_regist">http://210.30.100.172:8671/api/accounts/register</string>
+    <string name="url_logout">http://210.30.100.172:8671/api/accounts/logout</string>
+    <string name="url_pipe">http://210.30.100.172:8671/api/pipe</string>
+    <string name="severIP">http://210.30.100.172:8671</string>
 </resources>

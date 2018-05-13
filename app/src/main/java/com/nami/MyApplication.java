@@ -13,16 +13,34 @@ public class MyApplication extends Application {
 
     private Device myDevice;
     private User user;
-    private static String ServerIP = "192.168.1.2";
-    private static String SeverPort = "9800";
+    private String token;  // Air-Token
+    private boolean IF_BIND_DEV; // 是否绑定了设备, 是的话为true;
 
     @Override
     public void onCreate() {
         super.onCreate();
         myDevice = new Device();
         user = new User();
+        token = null;
+        IF_BIND_DEV = false;
 
         Log.d("MyApplication", "onCreate()");
+    }
+
+    public void setIF_BIND_DEV(boolean IF_BIND_DEV) {
+        this.IF_BIND_DEV = IF_BIND_DEV;
+    }
+
+    public boolean getIF_BIND_DEV(){
+        return IF_BIND_DEV;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public Device getMyDevice() {
@@ -33,13 +51,6 @@ public class MyApplication extends Application {
         return user;
     }
 
-    public static String getServerIP() {
-        return ServerIP;
-    }
-
-    public static String getSeverPort() {
-        return SeverPort;
-    }
 
     public void setMyDevice(Device myDevice) {
         this.myDevice = myDevice;

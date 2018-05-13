@@ -2,15 +2,14 @@ package com.nami.Entity;
 
 public class User {
 
-    private String userID;  // ID
+    private int userID;  // ID
     private String email;   // Email
     private String name;    // Username
-    private String password;
 
     public User(){
-        userID = null;
-        name = null;
-        password = null;
+        userID = 0;
+        name = "noUer";
+        email = "noMail";
     }
 
     public void setEmail(String email) {
@@ -25,11 +24,8 @@ public class User {
         this.name = name;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
-    public void setUserID(String userID) {
+    public void setUserID(int userID) {
         this.userID = userID;
     }
 
@@ -37,11 +33,8 @@ public class User {
         return name;
     }
 
-    public String getPassword() {
-        return password;
-    }
 
-    public String getUserID() {
+    public int getUserID() {
         return userID;
     }
 }

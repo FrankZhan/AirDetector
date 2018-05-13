@@ -35,7 +35,10 @@ import com.espressif.iot.esptouch.IEsptouchResult;
 import com.espressif.iot.esptouch.IEsptouchTask;
 import com.espressif.iot.esptouch.task.__IEsptouchTask;
 import com.espressif.iot.esptouch.util.EspAES;
+import com.nami.Entity.Device;
+import com.nami.MyApplication;
 import com.nami.R;
+import com.nami.network.OKHttpUtil;
 import com.nami.network.UDPSocketClient;
 import com.nami.network.UDPSocketServer;
 import com.nami.util.EspWifiAdminSimple;
@@ -43,11 +46,16 @@ import com.nami.util.EspWifiAdminSimple;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /*
 导入外部库需要设置setting.gradle 和 依赖
@@ -62,6 +70,14 @@ public class AddDeviceActivity extends AppCompatActivity{
     private ProgressBar proAddDev;
     private String TAG="AddDeviceActivity";
     private ImageView mark;
+    private String url;     // 绑定设备url
+    private String severIP;
+    private final int MSG_SUCCESS = 0;
+    private final int MSG_FAIL = 1;
+    private Device myDevice;
+    private MyApplication myApplication;
+    private String Uid;
+    private String Tag;
 
     private EspWifiAdminSimple mWifiAdmin;
     private EsptouchAsyncTask3 mTask;
@@ -77,6 +93,11 @@ public class AddDeviceActivity extends AppCompatActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
 
+        myApplication = (MyApplication)getApplication();
+        myDevice = myApplication.getMyDevice();
+
+        url = getResources().getString(R.string.url_pipe);
+        severIP = getResources().getString(R.string.severIP);
         mWifiAdmin = new EspWifiAdminSimple(this);
         mark = (ImageView)findViewById(R.id.mark);
         proAddDev = (ProgressBar)findViewById(R.id.progress_add);
@@ -105,7 +126,10 @@ public class AddDeviceActivity extends AppCompatActivity{
         String apBssid = mWifiAdmin.getWifiConnectedBssid();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmm");
         Date date = new Date(System.currentTimeMillis());
-        String jsonData = "{'user':'18840813682', 'time':'"+simpleDateFormat.format(date)+"'}";
+        String jsonData = "{'token':'" + myApplication.getToken() +
+                "', 'time':'"+simpleDateFormat.format(date)+
+                "', 'severIP':'"+severIP+
+                "'}";
         Log.d(TAG, "jsonData:"+jsonData);
 
         //设置展示控件
@@ -251,8 +275,8 @@ public class AddDeviceActivity extends AppCompatActivity{
         protected void onPostExecute(List<IEsptouchResult> result) {
 
             Log.d(TAG, "onPostExecute");
-            proAddDev.setVisibility(View.INVISIBLE);
-            mark.setVisibility(View.VISIBLE);
+//            proAddDev.setVisibility(View.INVISIBLE);  // 进度条
+//            mark.setVisibility(View.VISIBLE);         // 结果
             if (result == null) {
                 Log.d(TAG, "Create Esptouch task failed, the esptouch port could be used by other thread");
                 txtDev.setText(R.string.no_device);
@@ -265,13 +289,21 @@ public class AddDeviceActivity extends AppCompatActivity{
             // check whether the task is cancelled and no results received
             if (!firstResult.isCancelled()) {
                 if (firstResult.isSuc()) {
+                    // 添加设备成功
                     Log.d(TAG, "Esptouch success, bssid = " + firstResult.getBssid()
                             + ",InetAddress = " + firstResult.getInetAddress().getHostAddress() + "\n");
-                    txtDev.setText(firstResult.getInetAddress().getHostAddress());
+
+                    Uid = firstResult.getBssid();
+                    Tag = "Home";
+                    upLoadSever();  // 把绑定信息上传服务器
+                    //txtDev.setText(firstResult.getInetAddress().getHostAddress());
                 } else {
                     Log.d(TAG, "Create Esptouch task failed, the esptouch port could be used by other thread");
+
+                    proAddDev.setVisibility(View.INVISIBLE);  // 进度条
+                    mark.setVisibility(View.VISIBLE);
                     txtDev.setText(R.string.no_device);
-                    mark.setImageResource(R.drawable.problem);
+                    mark.setImageResource(R.drawable.problem);  // 结果
                     Toast.makeText(AddDeviceActivity.this, "添加设备失败，请稍后再试", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -368,4 +400,88 @@ public class AddDeviceActivity extends AppCompatActivity{
 
     }
 
+    // 上传更改信息
+    private void upLoadSever(){
+        //显示进度条
+
+        JSONObject params = new JSONObject();
+        JSONObject device = new JSONObject();
+        try{
+            device.put("Uid", Uid);
+            device.put("Tag", Tag);
+            params.put("BindDevice", device);
+        }catch (JSONException e){
+            Toast.makeText(getApplicationContext(), "绑定设备失败", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+            return;
+        }
+        String jsonStr = params.toString();
+        OKHttpUtil.doPost(myApplication.getToken(), url, jsonStr, myCallBack);
+    }
+
+    // 处理信息
+    @SuppressLint("HandlerLeak")
+    private Handler myHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch(msg.what){
+                case MSG_SUCCESS:
+                    proAddDev.setVisibility(View.INVISIBLE);  // 进度条
+                    mark.setVisibility(View.VISIBLE);
+                    txtDev.setText(Tag);
+                    mark.setImageResource(R.drawable.mark);  // 结果
+
+                    myDevice.setMAC(Uid);
+                    myDevice.setName(Tag);
+                    myApplication.setIF_BIND_DEV(true);
+                    Toast.makeText(getApplicationContext(), "绑定设备成功", Toast.LENGTH_SHORT).show();
+                    break;
+                case MSG_FAIL:
+                    proAddDev.setVisibility(View.INVISIBLE);  // 进度条
+                    mark.setVisibility(View.VISIBLE);
+                    txtDev.setText(R.string.no_device);
+                    mark.setImageResource(R.drawable.problem);  // 结果
+                    Toast.makeText(getApplicationContext(), "绑定设备失败", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    super.handleMessage(msg);
+                    break;
+            }
+        }
+    };
+    // Okhttp 回调函数
+    private Callback myCallBack = new  Callback() {
+
+        @Override
+        public void onFailure(Call call, IOException e) {
+            Message msg = Message.obtain();
+            msg.what = MSG_FAIL;
+            myHandler.sendMessage(msg);
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onResponse(Call call, Response response) throws IOException {
+            Message msg = Message.obtain();
+            msg.what = MSG_FAIL;
+
+            if (response.isSuccessful()) {
+                String result = response.body().string();
+                Log.d(TAG, "response.body().string(): " + result);
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONObject bindDevice = jsonObject.getJSONObject("BindDevice");
+                    int code = bindDevice.getInt("code");
+                    if(code == 0){
+                        msg.what = MSG_SUCCESS;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else {
+                Log.e(TAG, "infoCallBack response fail");
+            }
+            myHandler.sendMessage(msg);
+        }
+    };
 }

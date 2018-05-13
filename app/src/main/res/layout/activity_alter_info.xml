@@ -24,88 +24,36 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/username"
-        android:layout_marginTop="10dp"
-        android:background="@color/riceWhite"
+    <TextView
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
-        android:padding="5dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="用户名"/>
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="昵称"
-            android:inputType="textEmailAddress"
-            android:maxLength="25"
-            android:maxLines="1" />
-
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_marginTop="1dp"
-        android:background="@color/riceWhite"
+    <TextView
+        android:id="@+id/txt_username"
         android:layout_width="match_parent"
-        android:padding="5dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:maxLines="1"
+        android:text="username"
+        android:background="@color/riceWhite" />
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="e-mail"
-            android:inputType="textEmailAddress"
-            android:maxLength="25"
-            android:maxLines="1" />
-
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_margin="1dp"
-        android:background="@color/riceWhite"
+    <TextView
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
-        android:padding="5dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="E-Mail"/>
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="密码"
-            android:inputType="textPassword"
-            android:maxLength="25"
-            android:maxLines="1" />
-
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_margin="1dp"
-        android:background="@color/riceWhite"
+    <TextView
+        android:id="@+id/txt_mail"
         android:layout_width="match_parent"
-        android:padding="5dp"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="确认密码"
-            android:inputType="textPassword"
-            android:maxLength="25"
-            android:maxLines="1" />
-
-    </android.support.design.widget.TextInputLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <Button
-            android:id="@+id/bnt_go"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/touch_blue_deep"
-            android:layout_marginBottom="20dp"
-            android:text="确认修改" />
-    </RelativeLayout>
-
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:maxLines="1"
+        android:text="e-mail"
+        android:background="@color/riceWhite" />
 
 </LinearLayout>

@@ -4,8 +4,9 @@ public class Device {
     private String MAC;   // Uid
     private String name;  //DeviceTag
     public Device(){
-        MAC = null;
-        name = null;
+        // 便于测试，所以赋予了初值
+        MAC = "FF:FF:FF:FF:FF";
+        name = "Home";
     }
 
     public void setMAC(String MAC) {
