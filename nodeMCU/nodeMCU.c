@@ -8,8 +8,10 @@
  * ESP8266HTTPClient.h
 * 程序开发工具Arduino 1.8.4
 * 开发板 nodeMCU
-* 不清楚发送的数据格式
-* 不清楚接受的时间格式
+* 1. 使用smartconfig连接wifi，并通过UDP包与app互通初始化信息
+* 2. 使用get从后台服务器处获取时间信息，并发送给stm32更新屏幕
+* 3. 从D7, D8口接受stm32传过来的传感器信息，并通过post上传给服务器
+*
 */
 WiFiUDP Udp;
 IPAddress appUdpIP(255, 255, 255, 255);
@@ -18,7 +20,7 @@ unsigned int localUdpPort = 7001;  // local port to listen on
 unsigned int appUdpPort = 18266;  //target port to send reply packet
 boolean IFWIFI;   // 是否连接到了WIFI
 char tim[20] = "201805081600";     // 初试时间, eg:201804281600
-char data[200] = "{ \"CarbonDioxide\":56, \"Formaldehyde\":12, \"ParticlePollutionTwoPointFive\":5, \"Temperature\":25, \"Humidity\":43 }" ; // 保存传感器数据;
+char data[200] ; // 保存传感器数据;
 char severIP[100];  //保存服务器IP
 char token[500];  // 保存用户令牌， Air-Token
 char mac_char[18];  //MCU Mac地址，DeviceID
@@ -40,10 +42,9 @@ void setup() {
 }
 
 void loop() {
-
+   int index = 0;
    if(IFWIFI){
       //读取 格式为 { ... ... }的数据
-      int index;
       while (stm32.available() > 0) {
         index = 0;
         char tmp = stm32.read();
@@ -54,7 +55,7 @@ void loop() {
               tmp = stm32.read();
               data[index++]=tmp;
             }
-          }while(tmp!='}');
+          }while(tmp!='}' && index<199);
           break;
         }
       }
@@ -63,18 +64,18 @@ void loop() {
         Serial.print("\nreceive sensor data:");
         Serial.print(data);
         Serial.print("\t");
-        index--;
-        data[index] = '\0';
         postData();
-      }   
+      }
    }
    count++;
    // 循环二十次发一次时间
    if(count > 20){
        getTime();
+       data[108]='\0';
+       postData();
        count = 0;
    }
-   digitalWrite(LED_BUILTIN, HIGH); 
+   digitalWrite(LED_BUILTIN, HIGH);
    delay(500);
    digitalWrite(LED_BUILTIN, LOW);
    delay(500);
@@ -85,7 +86,8 @@ void getTime(){
     char url[100];
     char result[100];
     int point = 0;
-    sprintf(url, "/api/time", severIP);
+    sprintf(url, "%s/api/time", severIP);
+    Serial.printf("Get url: %s. ", url);
     HTTPClient http;
     http.begin(url);
     int httpCode = http.GET();
@@ -94,54 +96,52 @@ void getTime(){
       if(httpCode == HTTP_CODE_OK){
         String result = http.getString();
         Serial.println(result);
-        
         // obtain the json msg
         StaticJsonBuffer<200> jsonBuf;
         JsonObject& root = jsonBuf.parse(result);
         if(root.success()){
           strcpy(tim, root["time"]);
-          formatTime();
           sendTime();
          }
        }
     }else{
       Serial.printf("Http Get failed");
     }
-    http.end();    
+    http.end();
   }
-}
-//            0123456789012345
-// 格式化时间 2018-05-11 19:30-》
-//            201805111930
-void formatTime(){
-  char tmp[20];
-  strcpy(tmp, tim);
-  tim[4]=tmp[5];
-  tim[5]=tmp[6];
-  tim[6]=tmp[8];
-  tim[7]=tmp[9];
-  tim[8]=tmp[11];
-  tim[9]=tmp[12];
-  tim[10]=tmp[14];
-  tim[11]=tmp[15];
-  tim[12]=0;
 }
 // 把时间发送给32
 void sendTime(){
   //把wifi连接结果告知32
+   tim[12] = '\0';
    char tmp[15];
    sprintf(tmp, "T%s", tim);
    Serial.printf("Time is %s", tmp);
-   stm32.write(tmp);
+   for(int i=0;i<2;i++){
+    stm32.write(tmp);
+   }
 }
 // 上传数据到服务器。注意设置上传间隔
+// data误码率高，所以采用1,2,3的json 传数据。nodeMCU解析后重新封装成服务器所学的包上传
 void postData(){
-  
   if(data == NULL){
     return;
   }
-  char tmp[200];
-  sprintf(tmp, "{\"PushStatistics\": %s, \"DeviceID\": \"%s\"} }", data, mac_char);
+  int wen=0, shi=0, PM=0, CO=0, CH4=0;
+   StaticJsonBuffer<200> jsonBuf;
+   JsonObject& root = jsonBuf.parse(data);
+   if(root.success()){
+     wen = root["1"];
+     shi = root["2"];
+     PM = root["3"];
+     CO = root["4"];
+     CH4 = root["5"];
+   }else{
+     return;
+   }
+   char tmp[300];
+   mac_char[17]=0;
+   sprintf(tmp, "{\"PushStatistics\":{ \"CarbonDioxide\":%d, \"Formaldehyde\":%d, \"ParticlePollutionTwoPointFive\":%d, \"Temperature\":%d, \"Humidity\":%d,\"DeviceID\": \"%s\"} }", CO, CH4, PM, wen, shi, mac_char);
   if(IFWIFI){
     char url[100];
     sprintf(url, "%s/api/pipe", severIP);
@@ -157,7 +157,7 @@ void postData(){
         Serial.printf("Http Post failed");
     }
     http.end();
-    Serial.print("upload url: ");
+    Serial.print("\nupload url: ");
     Serial.println(url);
     Serial.println("Send data: ");
     Serial.println(tmp);

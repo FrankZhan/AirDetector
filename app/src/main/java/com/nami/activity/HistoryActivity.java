@@ -23,10 +23,14 @@ import lecho.lib.hellocharts.view.LineChartView;
 
 public class HistoryActivity extends AppCompatActivity {
 
+    /**
+     * 以折线图方式展示历史信息，但是由于时间紧，未完成
+     * 现在只需从服务器处获取信息，并显示即可
+     */
     private static final String TAG = "MainActivity";
 
     private static final float chartWidth=7f; //当前试图显示几个数据条
-    LineChartView chartWen, chartShi, chartCO2;
+    LineChartView chartWen;
     String[] date = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10","11","12","13","14","15","16","17","18","19","20"};//X轴的标注
     int[] score = {25, 22, 18, 16, 15, 30, 22};//图表的数据点 , 35, 37, 10,15,18,20,24,25,26,27,28,29,30
     private List<AxisValue> mAxisYValues = new ArrayList<AxisValue>();
@@ -40,15 +44,11 @@ public class HistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_history);
 
         chartWen = (LineChartView)findViewById(R.id.chart_wen);
-        chartShi = (LineChartView)findViewById(R.id.chart_shi);
-        chartCO2 = (LineChartView)findViewById(R.id.chart_CO2);
 
         getAxisPoints();
         getAxisXLables();
 
         initChart(chartWen);
-        initChart(chartShi);
-        initChart(chartCO2);
 
         //设置悬浮按钮
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

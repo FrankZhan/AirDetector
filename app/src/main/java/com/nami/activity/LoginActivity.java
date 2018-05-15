@@ -170,8 +170,8 @@ public class LoginActivity extends AppCompatActivity {
 
             JSONObject devicesObj = jsonObject.getJSONObject("GetDeviceList");
             JSONArray devices = devicesObj.getJSONArray("devices");
-            if(!devices.isNull(0)){
-                JSONObject dev = devices.getJSONObject(0);
+            if(!devices.isNull(0)){                            // 测试
+                JSONObject dev = devices.getJSONObject(0);     // 测试
                 Device myDev = myApplication.getMyDevice();
                 myDev.setName(dev.getString("DeviceTag"));
                 myDev.setMAC(dev.getString("Uid"));

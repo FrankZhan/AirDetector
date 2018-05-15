@@ -16,10 +16,9 @@ import okhttp3.RequestBody;
 
 public class OKHttpUtil {
     /**
-     * 懒汉 安全 加同步
-     * 私有的静态成员变量 只声明不创建
-     * 私有的构造方法
-     * 提供返回实例的静态方法
+     *
+     * OKHttp工具包，可以获取实例自定义包，也可以使员工封装好的异步get和post方法
+     * get和post方法均需要自定义回调函数
      */
     private static OkHttpClient okHttpClient = null;
     private static final String TAG = "OKHttpUtil";

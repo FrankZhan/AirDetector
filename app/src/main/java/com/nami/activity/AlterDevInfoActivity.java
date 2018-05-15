@@ -125,6 +125,7 @@ public class AlterDevInfoActivity extends AppCompatActivity {
             switch(msg.what){
                 case MSG_SUCCESS:
                     dialog.cancel();
+                    myDevice.setName(deviceName.getText().toString().trim());
                     Toast.makeText(getApplicationContext(), "更改信息成功", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(AlterDevInfoActivity.this, DeviceManageActivity.class));
                     finish();

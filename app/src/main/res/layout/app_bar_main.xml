@@ -51,7 +51,7 @@
                     android:layout_height="300dp">
 
                     <TextView
-                        android:id="@+id/main_weather_wen"
+                        android:id="@+id/sk_wen"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -63,18 +63,18 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignTop="@id/main_weather_wen"
-                        android:layout_toEndOf="@+id/main_weather_wen"
+                        android:layout_alignTop="@id/sk_wen"
+                        android:layout_toEndOf="@+id/sk_wen"
                         android:padding="2dp"
                         android:text="°C"
                         android:textColor="@color/riceWhite"
                         android:textSize="20sp" />
 
                     <TextView
-                        android:id="@+id/main_weather_place"
+                        android:id="@+id/sk_place"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/main_weather_wen"
+                        android:layout_below="@id/sk_wen"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="20dp"
                         android:text="大连市"
@@ -83,10 +83,11 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/main_weather_place"
+                        android:layout_below="@id/sk_place"
                         android:layout_marginTop="30dp">
 
                         <TextView
+                            android:id="@+id/sk_weather"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -100,6 +101,7 @@
                             android:background="@color/riceWhite"/>
 
                         <TextView
+                            android:id="@+id/sk_wind"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -113,6 +115,7 @@
                             android:background="@color/riceWhite"/>
 
                         <TextView
+                            android:id="@+id/sk_hum"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -156,12 +159,14 @@
                             android:text="明天"/>
 
                         <TextView
+                            android:id="@+id/second_weather"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
                             android:text="晴"/>
 
                         <TextView
+                            android:id="@+id/second_temperature"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
@@ -183,12 +188,14 @@
                             android:text="后天" />
 
                         <TextView
+                            android:id="@+id/third_weather"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
                             android:text="晴"/>
 
                         <TextView
+                            android:id="@+id/third_temperature"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
@@ -205,17 +212,20 @@
                         android:gravity="center_vertical">
 
                         <TextView
+                            android:id="@+id/last_week"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="周三" />
 
                         <TextView
+                            android:id="@+id/last_weather"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
                             android:text="晴"/>
 
                         <TextView
+                            android:id="@+id/last_temperature"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
@@ -232,7 +242,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="2dp"
-                android:padding="2dp"
                 android:background="@drawable/touch_grey_white"
                 android:clickable="true"
                 android:focusable="true"
@@ -241,123 +250,155 @@
                 card_view:cardElevation="10dp"
                 app:cardBackgroundColor="@color/white">
 
-                <RelativeLayout
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toStartOf="@+id/item_layout"
-                        android:layout_centerVertical="true"
-                        android:padding="10dp"
-                        android:text="Home"
-                        android:textSize="30sp" />
-
                     <LinearLayout
                         android:id="@+id/item_layout"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_centerInParent="true"
-                        android:padding="8dp">
+                        android:background="@color/lightGrey">
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:padding="15dp"
                             android:orientation="horizontal">
 
                             <TextView
+                                android:layout_alignParentStart="true"
                                 android:layout_width="50dp"
                                 android:layout_height="wrap_content"
                                 android:text="温度" />
 
                             <TextView
+                                android:id="@+id/dev_temperature"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
                                 android:text="20°C"/>
 
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="wrap_content"
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:padding="15dp"
+                            android:layout_marginTop="1dp"
                             android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="50dp"
-                                android:layout_height="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
                                 android:text="湿度" />
 
                             <TextView
+                                android:id="@+id/dev_humidity"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
                                 android:text="20°C"/>
 
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="wrap_content"
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:padding="15dp"
+                            android:layout_marginTop="1dp"
                             android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="50dp"
                                 android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
                                 android:text="甲醛" />
 
                             <TextView
+                                android:id="@+id/dev_formaldehyde"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
                                 android:text="20°C"/>
 
-                        </LinearLayout>
+                        </RelativeLayout>
 
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_centerVertical="true"
-                        android:layout_toEndOf="@+id/item_layout"
-                        android:padding="8dp">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:padding="15dp"
+                            android:layout_marginTop="1dp"
                             android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="50dp"
-                                android:layout_height="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
                                 android:text="CO2" />
 
                             <TextView
+                                android:id="@+id/dev_CO2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
                                 android:text="20°C"/>
 
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="wrap_content"
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:padding="15dp"
+                            android:layout_marginTop="1dp"
                             android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="50dp"
                                 android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
                                 android:text="PM2.5" />
 
                             <TextView
+                                android:id="@+id/dev_PM"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
                                 android:text="20°C"/>
 
-                        </LinearLayout>
+                        </RelativeLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:padding="15dp"
+                            android:text="@string/app_name"
+                            android:textColor="@color/lightGreen"
+                            android:background="@color/white"
+                            android:gravity="center"/>
 
                     </LinearLayout>
 
-                </RelativeLayout>
+                    <TextView
+                        android:id="@+id/dev_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="20dp"
+                        android:background="@drawable/round_textview"
+                        android:text="Home"
+                        android:textColor="@color/white"
+                        android:textSize="30sp" />
+                </FrameLayout>
 
             </android.support.v7.widget.CardView>
 
@@ -371,7 +412,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:backgroundTint="@color/colorPrimaryDark"
+        android:backgroundTint="@color/lightGreen"
         android:src="@drawable/ic_add"
         app:elevation="0dp" />
 
