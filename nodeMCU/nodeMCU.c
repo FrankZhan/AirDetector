@@ -71,8 +71,6 @@ void loop() {
    // 循环二十次发一次时间
    if(count > 20){
        getTime();
-       data[108]='\0';
-       postData();
        count = 0;
    }
    digitalWrite(LED_BUILTIN, HIGH);
