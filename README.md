@@ -4,7 +4,7 @@
 <br>nodeMCU 位nodeMCU的源码
 系统架构为：
 1. 空气检测仪采集数据：CO2, PM2.5, 温度，湿度， 甲醛浓度
-2. 后端程序
+2. 后端程序：https://github.com/appli456/air-detector-stat
 3. APP部分
 
 空气检测仪架构：
