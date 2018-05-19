@@ -27,7 +27,7 @@ APP:
 1. https://post.smzdm.com/p/540069/
 2. http://ruten-proteus.blogspot.com/2016/11/ESP8266ArduinoQA-01.html
 
-<br>SmartConfig参考资料：
+<br>SmartConfig（貌似官方叫ESPtouch）参考资料：
 1. 官方APP: https://github.com/EspressifApp/EsptouchForAndroid
 2. nodeMCU：就两行代码，直接看我的程序就行
 
