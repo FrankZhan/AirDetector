@@ -16,3 +16,19 @@ APP:
 <br>详见 /activity/historyActivity
 网络： 使用了OKHttp
 <br>详见 /activity/loginActivity， /Network/OKHttpUtil
+<br>获取天气信息：聚合数据
+
+<br>nodeMCU环境的搭建（Arduino IDE）：
+1. http://www.windworkshop.cn/?p=758
+2. https://blog.csdn.net/u012388993/article/details/70139147
+3. nodeMCU库：https://github.com/esp8266/Arduino
+
+<br>空气检测仪参考：
+1. https://post.smzdm.com/p/540069/
+2. http://ruten-proteus.blogspot.com/2016/11/ESP8266ArduinoQA-01.html
+
+<br>SmartConfig参考资料：
+1. 官方APP: https://github.com/EspressifApp/EsptouchForAndroid
+2. nodeMCU：就两行代码，直接看我的程序就行
+
+
